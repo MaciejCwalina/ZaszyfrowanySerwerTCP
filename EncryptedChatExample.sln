@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34024.191
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncryptedChatExample", "EncryptedChatExample\EncryptedChatExample.csproj", "{B173C8C8-2EB2-4E61-BF02-1A18F05B7571}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncryptedChatServer", "EncryptedChatServer\EncryptedChatServer.csproj", "{81FC87F0-F09E-4EC6-85A5-7F7D665C8E2D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B173C8C8-2EB2-4E61-BF02-1A18F05B7571}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B173C8C8-2EB2-4E61-BF02-1A18F05B7571}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B173C8C8-2EB2-4E61-BF02-1A18F05B7571}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B173C8C8-2EB2-4E61-BF02-1A18F05B7571}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81FC87F0-F09E-4EC6-85A5-7F7D665C8E2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81FC87F0-F09E-4EC6-85A5-7F7D665C8E2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81FC87F0-F09E-4EC6-85A5-7F7D665C8E2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81FC87F0-F09E-4EC6-85A5-7F7D665C8E2D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {737A4CA6-2155-4B7B-9CBE-480B26A9AB90}
+	EndGlobalSection
+EndGlobal
