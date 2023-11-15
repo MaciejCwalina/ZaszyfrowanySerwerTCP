@@ -3,9 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncryptedChatExample", "EncryptedChatExample\EncryptedChatExample.csproj", "{B173C8C8-2EB2-4E61-BF02-1A18F05B7571}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncryptedChatExample", "EncryptedChatExample\EncryptedChatExample.csproj", "{B173C8C8-2EB2-4E61-BF02-1A18F05B7571}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncryptedChatServer", "EncryptedChatServer\EncryptedChatServer.csproj", "{81FC87F0-F09E-4EC6-85A5-7F7D665C8E2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncryptedChatServer", "EncryptedChatServer\EncryptedChatServer.csproj", "{81FC87F0-F09E-4EC6-85A5-7F7D665C8E2D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B42D3206-F8AB-444F-ACF4-E400E1DD79E1}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,42 +1,81 @@
-﻿using System.Net;
+﻿using EncryptedChatServer;
+using System.Net;
 using System.Net.Sockets;
 
 class Program {
-    private static TcpListener _listener;
-    private static List<TcpClient> _connections = new List<TcpClient>();
+    private static List<User> _connections = new List<User>();
     private static async Task Main(String[] args) {
-        if(args.Length == 1) {
-            _listener = new TcpListener(IPAddress.Any, int.Parse(args[1]));
+        TcpListener listener;
+        if (args.Length == 1) {
+            listener = new TcpListener(IPAddress.Any, int.Parse(args[0]));
         } else {
-            _listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 9999);
+            listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 9999);
         }
 
-        _listener.Start();
-        while(true) {
-            if(_listener.Pending()) {
-                await Console.Out.WriteLineAsync("Adding");
-                _connections.Add(await _listener.AcceptTcpClientAsync());
+
+        listener.Start();
+        await Console.Out.WriteLineAsync($"Starting Server");
+        while (true) {
+            for (int i = 0; i < _connections.Count; i++) {
+                if (!_connections[i].Connected()) {
+                    await Console.Out.WriteLineAsync("Removing client");
+                    User disconnectedUser = _connections[i];
+                    _connections.RemoveAt(i);
+                    foreach (User connection in _connections) {
+                        BinaryWriter binaryWriter = new BinaryWriter(connection.tcpClient.GetStream());
+                        binaryWriter.Write((Byte)EPacketFlag.USERDISCONNECTED);
+                        UserPacket disconnectedUserPacket = new UserPacket();
+                        disconnectedUserPacket.SerializeUser(binaryWriter, disconnectedUser);
+                    }
+                }
             }
 
-            await HandleIncommingMessageRequest();
-        }
 
+            if (listener.Pending()) {
+                await Console.Out.WriteLineAsync("Got connecting");
+                TcpClient client = await listener.AcceptTcpClientAsync();
+                NetworkStream clientStream = client.GetStream();
+                BinaryReader binaryReader = new BinaryReader(clientStream);
+                UserPacket userPacket = new UserPacket();
+                User user = userPacket.DeserializeUser(binaryReader);
+                user.tcpClient = client;
+                _connections.Add(user);
+                foreach (User connection in _connections) {
+                    BinaryWriter binaryWriter = new BinaryWriter(connection.tcpClient.GetStream());
+                    binaryWriter.Write((Byte)EPacketFlag.KEY);
+                    binaryWriter.Write(_connections.Count);
+                    binaryWriter.Write(_connections.SelectMany(x => x.publicKey).ToArray());
+                }
+            }
+
+            HandleIncommingMessageRequest();
+        }
     }
 
-    private static async Task HandleIncommingMessageRequest() {
-        foreach(TcpClient client in _connections) {
+    private static void HandleIncommingMessageRequest() {
+        foreach (User client in _connections) {
+            if (!client.Connected()) {
+                continue;
+            }
 
-            NetworkStream networkStream;
-            if((networkStream = client.GetStream()).DataAvailable == true) {
-                Byte[] bytes = new Byte[256];
-                await networkStream.ReadAsync(bytes, 0, bytes.Length);
-                foreach(TcpClient tcpClient in _connections) {
-                    if(!tcpClient.Connected || client == tcpClient) {
-                        continue;
-                    }
+            UserPacket packet = new UserPacket();
+            NetworkStream clientStream = client.tcpClient.GetStream();
 
-                    await tcpClient.GetStream().WriteAsync(bytes);
+            if (!clientStream.DataAvailable) {
+                continue;
+            }
+
+            User user = packet.DeserializeUser(new BinaryReader(clientStream));
+            foreach (User toSend in _connections.Where(usr => Enumerable.SequenceEqual(user.publicKey, usr.publicKey))) {
+                if (toSend == client || !client.Connected()) {
+                    continue;
                 }
+
+                NetworkStream toSendStream = toSend.tcpClient.GetStream();
+                BinaryWriter toSendBinaryWriter = new BinaryWriter(toSendStream);
+                UserPacket sender = new UserPacket();
+                toSendStream.WriteByte((Byte)EPacketFlag.MESSAGE);
+                sender.SerializeUser(toSendBinaryWriter, user);
             }
         }
     }

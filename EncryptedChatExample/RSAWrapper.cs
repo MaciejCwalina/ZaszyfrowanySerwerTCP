@@ -1,9 +1,8 @@
 ﻿using System.Security.Cryptography;
-
 internal class RSAWrapper {
-    private RSA _rsa;
+    private RSACryptoServiceProvider _rsa;
     public RSAWrapper() {
-        this._rsa = RSA.Create();
+        this._rsa = new RSACryptoServiceProvider();
     }
 
     public void LoadFromFile(String path) {
@@ -11,10 +10,18 @@ internal class RSAWrapper {
     }
 
     public Byte[] Encrypt(Byte[] toEncrypt) {
-        return this._rsa.Encrypt(toEncrypt, RSAEncryptionPadding.OaepSHA256);
+        return this._rsa.Encrypt(toEncrypt, false);
     }
 
     public Byte[] Decrypt(Byte[] toDecrypt) {
-        return this._rsa.Decrypt(toDecrypt, RSAEncryptionPadding.OaepSHA256);
+        return this._rsa.Decrypt(toDecrypt, false);
+    }
+
+    public Byte[] GetPublicKey() {
+        return this._rsa.ExportSubjectPublicKeyInfo();
+    }
+
+    public void ImportPublicKey(Byte[] publicKey) {
+        this._rsa.ImportSubjectPublicKeyInfo(publicKey, out int _);
     }
 }

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EncryptedChatExample {
+﻿namespace EncryptedChatExample {
     internal class User {
-        public String Name { get; set; }
-        public String MessageContent { get; set; }
+        public String name = String.Empty;
+        public Byte[] messageContent = new byte[256];
+        public Byte[] publicKey = new Byte[294];
     }
 }
